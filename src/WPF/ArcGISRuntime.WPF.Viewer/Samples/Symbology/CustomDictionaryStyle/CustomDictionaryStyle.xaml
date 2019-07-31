@@ -1,8 +1,123 @@
-﻿<UserControl x:Class="ArcGISRuntime.WPF.Samples.CustomDictionaryStyle.CustomDictionaryStyle"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+﻿<UserControl
+    x:Class="ArcGISRuntime.WPF.Samples.CustomDictionaryStyle.CustomDictionaryStyle"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
     <Grid>
-        <esri:MapView x:Name="MyMapView"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBox
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="20,30,0,0"
+                BorderThickness="0"
+                Text="Style Configuration" />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Food style:" />
+            <ComboBox
+                x:Name="FoodStyleComboBox"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center" />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Rating:" />
+            <ComboBox
+                x:Name="RatingComboBox"
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center" />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Price:" />
+            <ComboBox
+                x:Name="PriceComboBox"
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center" />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Health Score:" />
+            <ComboBox
+                x:Name="HealthGradeComboBox"
+                Grid.Row="4"
+                Grid.Column="1"
+                Margin="10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center" />
+            <CheckBox
+                x:Name="ShowTextCheckbox"
+                Grid.Row="5"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Content="Show name"
+                IsChecked="True" />
+            <ComboBox
+                x:Name="NameComboBox"
+                Grid.Row="6"
+                Grid.Column="1"
+                Margin="0,0,10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                IsEnabled="{Binding ElementName=ShowTextCheckbox, Path=IsChecked}" />
+            <Button
+                Grid.Row="7"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="20,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Click="ApplyDictionaryRendererClick"
+                Content="Apply renderer" />
+            <Button
+                Grid.Row="8"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="20,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Click="ApplySimpleRendererClick"
+                Content="Clear" />
+        </Grid>
+        <esri:MapView x:Name="MyMapView" Grid.Column="1" />
     </Grid>
 </UserControl>
