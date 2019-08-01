@@ -1,9 +1,143 @@
-﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
-             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
-             xmlns:mapping="clr-namespace:Esri.ArcGISRuntime.Mapping;assembly=Esri.ArcGISRuntime" 
-             x:Class="ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle.CustomDictionaryStyle">
-  <Grid>
-    <esriUI:MapView x:Name="MyMapView"/>
-  </Grid>
+﻿<ContentPage
+    x:Class="ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle.CustomDictionaryStyle"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+    xmlns:mapping="clr-namespace:Esri.ArcGISRuntime.Mapping;assembly=Esri.ArcGISRuntime">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <esriUI:MapView x:Name="MyMapView" Grid.Row="0" />
+        <Grid x:Name="ButtonGrid" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Button
+                x:Name="Button1"
+                Grid.Row="0"
+                Clicked="Edit_Style_Clicked"
+                Text="Edit Style" />
+            <Button
+                x:Name="Button2"
+                Grid.Row="1"
+                Text="Apply Renderer" />
+            <Button
+                x:Name="Button3"
+                Grid.Row="2"
+                Text="Clear" />
+        </Grid>
+        <Grid
+            x:Name="StylePickerUI"
+            Grid.Row="0"
+            IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Margin="5"
+                HorizontalTextAlignment="Center"
+                Text="placeholder text" />
+            <ListView
+                x:Name="StylePicker"
+                Grid.Row="1"
+                ItemSelected="StylePicker_ItemSelected" />
+        </Grid>
+        <Grid
+            x:Name="FoodPickerUI"
+            Grid.Row="0"
+            IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                x:Name="FoodLabel"
+                Grid.Row="0"
+                Margin="5"
+                HorizontalTextAlignment="Center"
+                Text="placeholder text" />
+            <ListView
+                x:Name="FoodPicker"
+                Grid.Row="1"
+                ItemSelected="Picker_ItemSelected" />
+        </Grid>
+        <Grid
+            x:Name="RatingPickerUI"
+            Grid.Row="0"
+            IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Margin="5"
+                HorizontalTextAlignment="Center"
+                Text="placeholder text" />
+            <ListView
+                x:Name="RatingPicker"
+                Grid.Row="1"
+                ItemSelected="Picker_ItemSelected" />
+        </Grid>
+        <Grid
+            x:Name="PricePickerUI"
+            Grid.Row="0"
+            IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Margin="5"
+                HorizontalTextAlignment="Center"
+                Text="placeholder text" />
+            <ListView
+                x:Name="PricePicker"
+                Grid.Row="1"
+                ItemSelected="Picker_ItemSelected" />
+        </Grid>
+        <Grid
+            x:Name="HealthPickerUI"
+            Grid.Row="0"
+            IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Margin="5"
+                HorizontalTextAlignment="Center"
+                Text="placeholder text" />
+            <ListView
+                x:Name="HealthPicker"
+                Grid.Row="1"
+                ItemSelected="Picker_ItemSelected" />
+        </Grid>
+        <Grid
+            x:Name="NamePickerUI"
+            Grid.Row="0"
+            IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Margin="5"
+                HorizontalTextAlignment="Center"
+                Text="placeholder text" />
+            <ListView
+                x:Name="NamePicker"
+                Grid.Row="1"
+                ItemSelected="Picker_ItemSelected" />
+        </Grid>
+    </Grid>
 </ContentPage>
