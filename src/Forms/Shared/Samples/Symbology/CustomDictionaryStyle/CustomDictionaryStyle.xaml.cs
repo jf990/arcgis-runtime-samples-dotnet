@@ -20,6 +20,7 @@ using Xamarin.Forms;
 using System.Collections.Generic;
 using System;
 using ArcGISRuntime.Samples.Managers;
+using System.Linq;
 
 namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
 {
@@ -34,7 +35,11 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
         // The custom dictionary style for symbolizing restaurants.
         private DictionarySymbolStyle _restaurantStyle;
 
-        private List<string> _styleItems = new List<string>() {"Food: ", "Rating: ", "Price: ", "Health Score: ", "Name: " };
+        private Dictionary<string, string> _styleItems = new Dictionary<string, string>();
+
+        private bool pickingCategory = true;
+        private string _currentStyle;
+        private List<string> symbolFields;
 
     public CustomDictionaryStyle()
         {
@@ -46,6 +51,13 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
         {
             try
             {
+                //< "Food", "" >, "Rating: ", "Price: ", "Health Score: ", "Name: "
+                _styleItems.Add("Food", "");
+                _styleItems.Add("Rating", "");
+                _styleItems.Add("Price", "");
+                _styleItems.Add("Health Score", "");
+                _styleItems.Add("Name", "");
+
                 // Open the custom style file.
                 string stylxPath = GetStyleFilePath();
                 _restaurantStyle = await DictionarySymbolStyle.CreateFromFileAsync(stylxPath);
@@ -63,7 +75,7 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
                 IReadOnlyList<Field> datasetFields = restaurantLayer.FeatureTable.Fields;
 
                 // Build a list of numeric and text field names.
-                var symbolFields = new List<string> { " " };
+                symbolFields = new List<string> { " " };
                 foreach (Field fld in datasetFields)
                 {
                     if (fld.FieldType != FieldType.Blob &&
@@ -79,7 +91,7 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
                 }
 
                 // Show the fields in the combo boxes.
-                FoodPicker.ItemsSource = symbolFields;
+                //FoodPicker.ItemsSource = symbolFields;
 
 
                 // Set the map's initial extent to that of the restaurants.
@@ -107,47 +119,100 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
             // Enable Listview for styles
             StylePicker.ItemsSource = _styleItems;
             StylePickerUI.IsVisible = true;
-            
+            PickerText.Text = "Select a style to edit.";
         }
 
         private void StylePicker_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            // Disable styles listview
-            StylePickerUI.IsVisible = false;
-            
-
-            switch (e.SelectedItemIndex)
+            // Go to selected category
+            if(pickingCategory)
             {
-                case 0:
-                    FoodPickerUI.IsVisible = true;
-                    FoodPicker.SelectedItem = null;
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
+                _currentStyle = ((KeyValuePair<string, string>)e.SelectedItem).Key;
+                StylePicker.ItemsSource = symbolFields;
+                pickingCategory = false;
+                PickerText.Text = "Select a field for "+_currentStyle;
             }
-            
-
+            else
+            {
+                // Set item based on category selection
+                _styleItems[_currentStyle] = e.SelectedItem as string ?? "";
+                pickingCategory = true;
+                MyMapView.IsVisible = true;
+                ButtonGrid.IsVisible = true;
+                StylePickerUI.IsVisible = false;
+            }
         }
 
-        private void Picker_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private void Apply_Clicked(object sender, EventArgs e)
         {
-            char first = (StylePicker.SelectedItem as string)[0];
-            switch (first)
+            // Create overrides for expected field names that are different in this dataset.
+            var styleToFieldMappingOverrides = new Dictionary<string, string>
             {
-                case 'F':
-                    FoodPickerUI.IsVisible = false;
-                    FoodLabel.Text = _styleItems[0] = "Food: " + FoodPicker.SelectedItem as string;
-                    break;
+                { "style", _styleItems["Food"] },
+                { "healthgrade", _styleItems["Health Score"]},
+                { "rating", _styleItems["Rating"] },
+                { "price", _styleItems["Price"] },
+                { "opentimesun", "opensun" },
+                { "closetimesun", "closesun" },
+                { "opentimemon", "openmon" },
+                { "closetimemon", "closemon" },
+                { "opentimetue", "opentue" },
+                { "closetimetue", "closetue" },
+                { "opentimewed", "openwed" },
+                { "closetimewed", "closewed" },
+                { "opentimethu", "openthu" },
+                { "closetimethu", "closethu" },
+                { "opentimefri", "openfri" },
+                { "closetimefri", "closefri" },
+                { "opentimesat", "opensat" },
+                { "closetimesat", "closesat" }
+            };
+
+            // Create overrides for expected text field names (if any).
+            string labelField = _styleItems["Name"] != null ? _styleItems["Name"] : "";
+            Dictionary<string, string> textFieldOverrides = new Dictionary<string, string>
+                {
+                    { "name", labelField }
+                };
+
+            // Set the text visibility configuration setting.
+            //add checkbox
+            //_restaurantStyle.Configurations.ToList().Find(c => c.Name == "text").Value = ShowTextCheckbox.IsChecked == true ? "ON" : "OFF";
+            _restaurantStyle.Configurations.ToList().Find(c => c.Name == "text").Value = NameSwitch.IsToggled ? "ON" : "OFF";
+
+            // Create the dictionary renderer with the style file and the field overrides.
+            DictionaryRenderer dictRenderr = new DictionaryRenderer(_restaurantStyle, styleToFieldMappingOverrides, textFieldOverrides);
+
+            // Apply the dictionary renderer to the layer.
+            var restaurantLayer = MyMapView.Map.OperationalLayers.First() as FeatureLayer;
+            restaurantLayer.Renderer = dictRenderr;
+        }
+
+        private void ApplySimpleRendererClicked(object sender, EventArgs e)
+        {
+            // Apply a simple renderer that shows all points with the same marker symbol.
+            SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Black, 12);
+            SimpleRenderer rendrr = new SimpleRenderer(markerSymbol);
+            var restaurantLayer = MyMapView.Map.OperationalLayers.First() as FeatureLayer;
+            restaurantLayer.Renderer = rendrr;
+        }
+    }
+    internal class ListTemplateSelector : DataTemplateSelector
+    {
+        public DataTemplate FieldTemplate { get; set; }
+        public DataTemplate StyleTemplate { get; set; }
+
+        protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
+        {
+            if (item.GetType() == typeof(KeyValuePair<string, string>))
+            {
+                return FieldTemplate;
             }
-            StylePicker.SelectedItem = null;
-            MyMapView.IsVisible = true;
-            ButtonGrid.IsVisible = true;
+            if (item.GetType() == typeof(string))
+            {
+                return StyleTemplate;
+            }
+            return null;
         }
     }
 }
