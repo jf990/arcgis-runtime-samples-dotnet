@@ -145,9 +145,9 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
         {
             // Apply a simple renderer that shows all points with the same marker symbol.
             SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Black, 12);
-            SimpleRenderer rendrr = new SimpleRenderer(markerSymbol);
+            SimpleRenderer rendrer = new SimpleRenderer(markerSymbol);
             var restaurantLayer = MyMapView.Map.OperationalLayers.First() as FeatureLayer;
-            restaurantLayer.Renderer = rendrr;
+            restaurantLayer.Renderer = rendrer;
         }
 
         private static string GetStyleFilePath()

@@ -14,7 +14,6 @@ using Esri.ArcGISRuntime.Symbology;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ArcGISRuntime.WPF.Samples.CustomDictionaryStyle
@@ -36,7 +35,7 @@ namespace ArcGISRuntime.WPF.Samples.CustomDictionaryStyle
             Initialize();
         }
 
-        private async Task Initialize()
+        private async void Initialize()
         {
             try
             {
@@ -52,12 +51,12 @@ namespace ArcGISRuntime.WPF.Samples.CustomDictionaryStyle
                 map.OperationalLayers.Add(restaurantLayer);
 
                 // Get the fields from the restaurant feature table.
-                var restaurantTable = restaurantLayer.FeatureTable;
+                FeatureTable restaurantTable = restaurantLayer.FeatureTable;
                 await restaurantTable.LoadAsync();
                 IReadOnlyList<Field> datasetFields = restaurantLayer.FeatureTable.Fields;
 
                 // Build a list of numeric and text field names.
-                var symbolFields = new List<string> { " " };
+                List<string> symbolFields = new List<string> { " " };
                 foreach (Field fld in datasetFields)
                 {
                     if (fld.FieldType != FieldType.Blob &&
@@ -101,7 +100,7 @@ namespace ArcGISRuntime.WPF.Samples.CustomDictionaryStyle
         public void ApplyDictionaryRendererClick(object sender, RoutedEventArgs e)
         {
             // Create overrides for expected field names that are different in this dataset.
-            var styleToFieldMappingOverrides = new Dictionary<string, string>
+            Dictionary<string, string> styleToFieldMappingOverrides = new Dictionary<string, string>
             {
                 { "style", FoodStyleComboBox.SelectedValue.ToString() },
                 { "healthgrade", HealthGradeComboBox.SelectedValue.ToString() },
@@ -134,20 +133,20 @@ namespace ArcGISRuntime.WPF.Samples.CustomDictionaryStyle
             _restaurantStyle.Configurations.ToList().Find(c => c.Name == "text").Value = ShowTextCheckbox.IsChecked == true ? "ON" : "OFF";
 
             // Create the dictionary renderer with the style file and the field overrides.
-            DictionaryRenderer dictRenderr = new DictionaryRenderer(_restaurantStyle, styleToFieldMappingOverrides, textFieldOverrides);
+            DictionaryRenderer dictRenderer = new DictionaryRenderer(_restaurantStyle, styleToFieldMappingOverrides, textFieldOverrides);
 
             // Apply the dictionary renderer to the layer.
-            var restaurantLayer = MyMapView.Map.OperationalLayers.First() as FeatureLayer;
-            restaurantLayer.Renderer = dictRenderr;
+            FeatureLayer restaurantLayer = MyMapView.Map.OperationalLayers.First() as FeatureLayer;
+            restaurantLayer.Renderer = dictRenderer;
         }
 
         public void ApplySimpleRendererClick(object sender, RoutedEventArgs e)
         {
             // Apply a simple renderer that shows all points with the same marker symbol.
             SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Black, 12);
-            SimpleRenderer rendrr = new SimpleRenderer(markerSymbol);
-            var restaurantLayer = MyMapView.Map.OperationalLayers.First() as FeatureLayer;
-            restaurantLayer.Renderer = rendrr;
+            SimpleRenderer renderer = new SimpleRenderer(markerSymbol);
+            FeatureLayer restaurantLayer = MyMapView.Map.OperationalLayers.First() as FeatureLayer;
+            restaurantLayer.Renderer = renderer;
         }
 
         private static string GetStyleFilePath()
