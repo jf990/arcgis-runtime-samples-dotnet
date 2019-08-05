@@ -8,10 +8,22 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <DataTemplate x:Key="styleTemplate">
-                <Label Text="style" />
+                <ViewCell>
+                    <Label Text="{Binding}" VerticalTextAlignment="Center" />
+                </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="fieldTemplate">
-                <Label Text="field" />
+                <ViewCell>
+                    <Label VerticalTextAlignment="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding Key}" />
+                                <Span Text=" : " />
+                                <Span Text="{Binding Value}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </ViewCell>
             </DataTemplate>
             <local:ListTemplateSelector
                 x:Key="listTemplateSelector"
@@ -68,6 +80,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Label
                 x:Name="PickerText"
@@ -78,7 +91,12 @@
             <ListView
                 x:Name="StylePicker"
                 Grid.Row="1"
-                ItemSelected="StylePicker_ItemSelected" />
+                ItemSelected="StylePicker_ItemSelected"
+                ItemTemplate="{StaticResource listTemplateSelector}" />
+            <Button
+                Grid.Row="2"
+                Clicked="PickBack_Clicked"
+                Text="Back" />
         </Grid>
     </Grid>
 </ContentPage>

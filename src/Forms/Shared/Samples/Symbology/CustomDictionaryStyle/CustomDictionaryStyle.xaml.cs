@@ -29,11 +29,15 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
         // The custom dictionary style for symbolizing restaurants.
         private DictionarySymbolStyle _restaurantStyle;
 
+        // User selections for style dictionary.
         private Dictionary<string, string> _styleItems = new Dictionary<string, string>();
 
-        private bool pickingCategory = true;
+        // Variables for style editing user interface.
+        private bool _pickingCategory = true;
         private string _currentStyle;
-        private List<string> symbolFields;
+
+        // List of all field options.
+        private List<string> _symbolFields;
 
         public CustomDictionaryStyle()
         {
@@ -45,11 +49,10 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
         {
             try
             {
-                //< "Food", "" >, "Rating: ", "Price: ", "Health Score: ", "Name: "
-                _styleItems.Add("Food", "");
-                _styleItems.Add("Rating", "");
-                _styleItems.Add("Price", "");
-                _styleItems.Add("Health Score", "");
+                _styleItems.Add("Food", "Style");
+                _styleItems.Add("Rating", "Rating");
+                _styleItems.Add("Price", "Price");
+                _styleItems.Add("Health Score", "Inspection");
                 _styleItems.Add("Name", "");
 
                 // Open the custom style file.
@@ -69,7 +72,7 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
                 IReadOnlyList<Field> datasetFields = restaurantLayer.FeatureTable.Fields;
 
                 // Build a list of numeric and text field names.
-                symbolFields = new List<string> { " " };
+                _symbolFields = new List<string> { " " };
                 foreach (Field fld in datasetFields)
                 {
                     if (fld.FieldType != FieldType.Blob &&
@@ -80,12 +83,9 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
                         fld.FieldType != FieldType.OID &&
                         fld.FieldType != FieldType.Raster)
                     {
-                        symbolFields.Add(fld.Name);
+                        _symbolFields.Add(fld.Name);
                     }
                 }
-
-                // Show the fields in the combo boxes.
-                //FoodPicker.ItemsSource = symbolFields;
 
                 // Set the map's initial extent to that of the restaurants.
                 map.InitialViewpoint = new Viewpoint(restaurantLayer.FullExtent);
@@ -169,22 +169,30 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
         private void StylePicker_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             // Go to selected category
-            if (pickingCategory)
+            if (_pickingCategory)
             {
                 _currentStyle = ((KeyValuePair<string, string>)e.SelectedItem).Key;
-                StylePicker.ItemsSource = symbolFields;
-                pickingCategory = false;
+                StylePicker.ItemsSource = _symbolFields;
+                _pickingCategory = false;
                 PickerText.Text = "Select a field for " + _currentStyle;
             }
             else
             {
                 // Set item based on category selection
                 _styleItems[_currentStyle] = e.SelectedItem as string ?? "";
-                pickingCategory = true;
+                _pickingCategory = true;
                 MyMapView.IsVisible = true;
                 ButtonGrid.IsVisible = true;
                 StylePickerUI.IsVisible = false;
             }
+        }
+
+        private void PickBack_Clicked(object sender, EventArgs e)
+        {
+            _pickingCategory = true;
+            MyMapView.IsVisible = true;
+            ButtonGrid.IsVisible = true;
+            StylePickerUI.IsVisible = false;
         }
     }
     internal class ListTemplateSelector : DataTemplateSelector
