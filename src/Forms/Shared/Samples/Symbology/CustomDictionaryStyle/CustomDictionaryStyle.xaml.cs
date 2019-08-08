@@ -52,8 +52,8 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
                 _styleItems.Add("Food", "Style");
                 _styleItems.Add("Rating", "Rating");
                 _styleItems.Add("Price", "Price");
-                _styleItems.Add("Health Score", "Inspection");
-                _styleItems.Add("Name", "");
+                _styleItems.Add("Health Score", "");
+                _styleItems.Add("Name", "Name");
 
                 // Open the custom style file.
                 string stylxPath = GetStyleFilePath();
@@ -202,14 +202,8 @@ namespace ArcGISRuntimeXamarin.Samples.CustomDictionaryStyle
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if (item.GetType() == typeof(KeyValuePair<string, string>))
-            {
-                return FieldTemplate;
-            }
-            if (item.GetType() == typeof(string))
-            {
-                return StyleTemplate;
-            }
+            if (item.GetType() == typeof(KeyValuePair<string, string>)) { return FieldTemplate; }
+            if (item.GetType() == typeof(string)) { return StyleTemplate; }
             return null;
         }
     }
