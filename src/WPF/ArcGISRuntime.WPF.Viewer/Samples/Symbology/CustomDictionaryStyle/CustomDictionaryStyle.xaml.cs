@@ -105,21 +105,7 @@ namespace ArcGISRuntime.WPF.Samples.CustomDictionaryStyle
                 { "style", FoodStyleComboBox.SelectedValue.ToString() },
                 { "healthgrade", HealthGradeComboBox.SelectedValue.ToString() },
                 { "rating", RatingComboBox.SelectedValue.ToString() },
-                { "price", PriceComboBox.SelectedValue.ToString() },
-                { "opentimesun", "opensun" },
-                { "closetimesun", "closesun" },
-                { "opentimemon", "openmon" },
-                { "closetimemon", "closemon" },
-                { "opentimetue", "opentue" },
-                { "closetimetue", "closetue" },
-                { "opentimewed", "openwed" },
-                { "closetimewed", "closewed" },
-                { "opentimethu", "openthu" },
-                { "closetimethu", "closethu" },
-                { "opentimefri", "openfri" },
-                { "closetimefri", "closefri" },
-                { "opentimesat", "opensat" },
-                { "closetimesat", "closesat" }
+                { "price", PriceComboBox.SelectedValue.ToString() }
             };
 
             // Create overrides for expected text field names (if any).
