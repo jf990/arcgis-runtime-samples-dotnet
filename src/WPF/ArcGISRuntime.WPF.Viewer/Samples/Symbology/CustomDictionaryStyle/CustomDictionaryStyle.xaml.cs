@@ -56,7 +56,7 @@ namespace ArcGISRuntime.WPF.Samples.CustomDictionaryStyle
                 IReadOnlyList<Field> datasetFields = restaurantLayer.FeatureTable.Fields;
 
                 // Build a list of numeric and text field names.
-                List<string> symbolFields = new List<string> { " " };
+                List<string> symbolFields = new List<string> { "" };
                 foreach (Field fld in datasetFields)
                 {
                     if (fld.FieldType != FieldType.Blob &&
@@ -82,7 +82,7 @@ namespace ArcGISRuntime.WPF.Samples.CustomDictionaryStyle
                 FoodStyleComboBox.SelectedValue = "Style";
                 RatingComboBox.SelectedValue = "Rating";
                 PriceComboBox.SelectedValue = "Price";
-                HealthGradeComboBox.SelectedValue = " ";
+                HealthGradeComboBox.SelectedValue = "";
                 NameComboBox.SelectedValue = "Name";
 
                 // Set the map's initial extent to that of the restaurants.
@@ -102,18 +102,15 @@ namespace ArcGISRuntime.WPF.Samples.CustomDictionaryStyle
             // Create overrides for expected field names that are different in this dataset.
             Dictionary<string, string> styleToFieldMappingOverrides = new Dictionary<string, string>
             {
-                { "style", FoodStyleComboBox.SelectedValue.ToString() },
-                { "healthgrade", HealthGradeComboBox.SelectedValue.ToString() },
-                { "rating", RatingComboBox.SelectedValue.ToString() },
-                { "price", PriceComboBox.SelectedValue.ToString() }
+                { "style", FoodStyleComboBox.SelectedValue?.ToString() },
+                { "healthgrade", HealthGradeComboBox.SelectedValue?.ToString() },
+                { "rating", RatingComboBox.SelectedValue?.ToString() },
+                { "price", PriceComboBox.SelectedValue?.ToString() }
             };
 
             // Create overrides for expected text field names (if any).
-            string labelField = NameComboBox.SelectedValue != null ? NameComboBox.SelectedValue.ToString() : "";
-            Dictionary<string, string> textFieldOverrides = new Dictionary<string, string>
-                {
-                    { "name", labelField }
-                };
+            string labelField = NameComboBox.SelectedValue.ToString();
+            Dictionary<string, string> textFieldOverrides = new Dictionary<string, string> { { "name", labelField } };
 
             // Set the text visibility configuration setting.
             _restaurantStyle.Configurations.ToList().Find(c => c.Name == "text").Value = ShowTextCheckbox.IsChecked == true ? "ON" : "OFF";
